@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lộ trình 4 tuần AWS Cloud Foundations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#EEF3F6;--card:#fff;--ink:#1B2A41;--muted:#56657A;--line:#CBD6E0;--grid:#DCE5EC;--accent:#E8890C;--ok:#1F7A4D;--hl:#FFE45E;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#0F1826;--card:#17233A;--ink:#E6EDF7;--muted:#9FB0C8;--line:#2B3B57;--grid:#16233A;--accent:#FFB454;--ok:#5FD0A0;--hl:#6B5C00;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#0F1826;--card:#17233A;--ink:#E6EDF7;--muted:#9FB0C8;--line:#2B3B57;--grid:#16233A;--accent:#FFB454;--ok:#5FD0A0;--hl:#6B5C00;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background-color:var(--paper);
+ background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;
+ font:400 17px/1.65 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:40px 20px 80px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+button{font:inherit;cursor:pointer}
+.theme{font-size:.9rem;background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:999px;padding:6px 14px}
+h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.15;font-weight:800;letter-spacing:-.02em;margin:0;max-width:17ch}
+h2{font-size:1.4rem;margin:0 0 4px;font-weight:800}
+.lead{color:var(--muted);margin:16px 0 0;max-width:62ch}
+.total{margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:18px 22px;box-shadow:6px 6px 0 var(--line)}
+.bar{height:12px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .25s}
+.total b{font-size:1.6rem}
+.week{margin-top:40px}
+.week header{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px}
+.wp{font-size:.9rem;color:var(--muted)}
+.sub{color:var(--muted);margin:0 0 12px}
+.mod{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin-top:10px;cursor:pointer}
+.mod input,.task input{width:19px;height:19px;margin-top:5px;accent-color:var(--ok);flex:none}
+.mod b{display:block}
+.mod small{color:var(--muted);font-size:.93rem;line-height:1.5;display:block}
+.mod input:checked ~ div b{text-decoration:line-through;text-decoration-color:var(--ok);color:var(--muted)}
+.extra{margin-top:14px;border-left:5px solid var(--accent);background:var(--card);border-radius:0 6px 6px 0;padding:12px 16px}
+.extra h3{margin:0 0 6px;font-size:1rem}
+.task{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:3px 0}
+.task input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--ok)}
+.tips{margin-top:48px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:20px 22px}
+.tips ul{margin:8px 0 0;padding-left:22px}
+.tips li{margin-bottom:8px}
+mark{background:var(--hl);color:inherit;padding:0 3px}
+.reset{margin-top:20px;font-size:.9rem;background:none;color:var(--muted);border:1.5px solid var(--line);border-radius:999px;padding:6px 14px}
+footer{margin-top:40px;color:var(--muted);font-size:.93rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><span style="font-weight:700">Lộ trình học AWS</span><button class="theme" id="themeBtn" type="button">Đổi giao diện sáng/tối</button></div>
+
+<h1>Cloud Foundations trong 4 tuần</h1>
+<p class="lead">Lộ trình theo 11 module của khóa AWS Academy Cloud Foundations, chuẩn bị cho chứng chỉ Cloud Practitioner. Khoảng 5–6 giờ mỗi tuần. Tick từng mục khi xong, tiến độ được lưu ngay trong trình duyệt của bạn.</p>
+
+<div class="total" aria-live="polite">
+  <b id="pct">0%</b> <span id="cnt" style="color:var(--muted)"></span>
+  <div class="bar"><i id="fill"></i></div>
+</div>
+
+<div id="weeks"></div>
+
+<section class="tips">
+  <h2>Cách học cho nhớ lâu</h2>
+  <ul>
+    <li>Mỗi module: xem bài giảng, làm Knowledge Check, làm lab. Đừng bỏ lab.</li>
+    <li>Cuối mỗi module, viết 5 dòng tóm tắt bằng lời của bạn.</li>
+    <li>Lập bảng so sánh các dịch vụ dễ nhầm: <mark>S3 / EBS / EFS</mark>, <mark>EC2 / Lambda / Beanstalk</mark>, <mark>RDS / DynamoDB</mark>.</li>
+    <li>Học xong buổi nào thì tắt hoặc xóa tài nguyên buổi đó để tránh phát sinh chi phí.</li>
+    <li>Trước khi đăng ký thi, đọc exam guide mới nhất của Cloud Practitioner trên trang AWS vì nội dung và mã đề có thể thay đổi.</li>
+  </ul>
+</section>
+
+<button class="reset" id="reset" type="button">Xóa tiến độ</button>
+<footer>Sau Cloud Practitioner: học tiếp Lambda, API Gateway, DynamoDB, CloudFormation và làm một dự án cuối, rồi hướng tới Solutions Architect – Associate.</footer>
+</div>
+
+<script>
+const DATA=[
+ {t:"Tuần 1: Khái niệm, chi phí, hạ tầng, bảo mật",s:"Hiểu cloud là gì và bảo vệ tài khoản của bạn ngay từ đầu.",
+  m:[["Module 0–1: Giới thiệu khóa học và khái niệm cloud","Cloud là gì, lợi ích, quá trình chuyển lên AWS."],
+     ["Module 2: Kinh tế đám mây và billing","Cách tính giá, TCO, AWS Organizations, gói hỗ trợ."],
+     ["Module 3: Hạ tầng toàn cầu của AWS","Region, Availability Zone, edge location."],
+     ["Module 4: Bảo mật trên cloud","Mô hình trách nhiệm chia sẻ, IAM, bảo vệ tài khoản và dữ liệu."]],
+  x:["Tạo tài khoản AWS và chọn gói phù hợp","Bật MFA cho tài khoản gốc","Đặt cảnh báo ngân sách (Budgets)","Tạo một IAM user để dùng hằng ngày"]},
+ {t:"Tuần 2: Mạng và tính toán",s:"Dựng được một web server chạy trong mạng riêng của bạn.",
+  m:[["Module 5: Mạng và phân phối nội dung","VPC, subnet, security group, CDN."],
+     ["Module 6: Dịch vụ tính toán","EC2, container, Lambda, Elastic Beanstalk: biết khi nào dùng cái nào."]],
+  x:["Tự dựng một VPC","Chạy web server trên EC2 rồi truy cập từ trình duyệt","Tắt hoặc xóa EC2 sau khi học xong"]},
+ {t:"Tuần 3: Lưu trữ và cơ sở dữ liệu",s:"Phân biệt rõ từng loại lưu trữ và từng loại CSDL.",
+  m:[["Module 7: Lưu trữ","EBS, S3, EFS, Glacier: khối, đối tượng, tệp, lưu trữ lạnh."],
+     ["Module 8: Cơ sở dữ liệu","RDS, DynamoDB và các loại CSDL khác của AWS."]],
+  x:["Host một website tĩnh trên S3","Tạo một bảng DynamoDB và thêm vài bản ghi","Hoàn thành bảng so sánh S3 / EBS / EFS"]},
+ {t:"Tuần 4: Kiến trúc, giám sát, ôn thi",s:"Gom kiến thức lại và kiểm tra bằng bài thi thử.",
+  m:[["Module 9: Kiến trúc đám mây","Well-Architected Framework, Trusted Advisor."],
+     ["Module 10: Auto Scaling và giám sát","Elastic Load Balancing, Auto Scaling, CloudWatch."],
+     ["Module 11: Chuẩn bị thi Cloud Practitioner","Cấu trúc đề, mẹo ôn tập."]],
+  x:["Làm bài thi thử và ghi lại các câu sai","Học lại các phần còn yếu","Đặt lịch thi Cloud Practitioner"]}
+];
+let state={};
+try{state=JSON.parse(localStorage.getItem('aws-acf')||'{}')}catch(e){}
+const root=document.getElementById('weeks');
+let all=[];
+DATA.forEach((w,wi)=>{
+  const sec=document.createElement('section');sec.className='week';
+  let h=`<header><h2>${w.t}</h2><span class="wp" id="wp${wi}"></span></header><p class="sub">${w.s}</p>`;
+  w.m.forEach((m,mi)=>{const id=`w${wi}m${mi}`;h+=`<label class="mod"><input type="checkbox" data-id="${id}" data-w="${wi}"><div><b>${m[0]}</b><small>${m[1]}</small></div></label>`});
+  h+=`<div class="extra"><h3>Thực hành thêm</h3>`;
+  w.x.forEach((x,xi)=>{const id=`w${wi}x${xi}`;h+=`<label class="task"><input type="checkbox" data-id="${id}" data-w="${wi}"><span>${x}</span></label>`});
+  h+=`</div>`;
+  sec.innerHTML=h;root.appendChild(sec);
+});
+const boxes=[...document.querySelectorAll('input[data-id]')];
+function update(){
+  const done=boxes.filter(b=>b.checked).length;
+  const p=Math.round(done/boxes.length*100);
+  document.getElementById('pct').textContent=p+'%';
+  document.getElementById('cnt').textContent=`(${done}/${boxes.length} mục)`;
+  document.getElementById('fill').style.width=p+'%';
+  DATA.forEach((_,wi)=>{
+    const b=boxes.filter(x=>x.dataset.w==wi);
+    document.getElementById('wp'+wi).textContent=b.filter(x=>x.checked).length+'/'+b.length+' mục';
+  });
+  const s={};boxes.forEach(b=>{if(b.checked)s[b.dataset.id]=1});
+  try{localStorage.setItem('aws-acf',JSON.stringify(s))}catch(e){}
+}
+boxes.forEach(b=>{b.checked=!!state[b.dataset.id];b.addEventListener('change',update)});
+update();
+document.getElementById('reset').addEventListener('click',()=>{
+  if(confirm('Xóa toàn bộ tiến độ?')){boxes.forEach(b=>b.checked=false);update()}
+});
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  const r=document.documentElement;
+  const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme=dark?'light':'dark';
+});
+</script>
+</body>
+</html>
